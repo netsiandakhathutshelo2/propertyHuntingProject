@@ -26,7 +26,7 @@ price = soup.find_all(name="span", class_="PropertyCardWrapper__StyledPriceLine"
 location_list = [address.getText().strip().replace("|", "") for address in location]
 print(location_list)
 
-price_list = [prices.getText().strip().replace("/mo", "") for prices in price]
+price_list = [prices.getText().strip().replace("/mo", "").replace("1 bd","") for prices in price]
 print(price_list)
 
 link_list = [links["href"] for links in link]
