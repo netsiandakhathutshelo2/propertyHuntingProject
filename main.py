@@ -5,10 +5,16 @@ from selenium import webdriver
 import selenium
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import time
+
+header = {
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_5) AppleWebKit/537.36 "
+                  "(KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36",
+    "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8"
+}
 
 website_url = "https://appbrewery.github.io/Zillow-Clone/"
-form_url = ("https://docs.google.com/forms/d/e/"
-            "1FAIpQLSfqWaWRaoE35-BcIlRj_jq3WMisHWkkh1oslpS8uFWf3WrbFw/viewform?usp=sf_link")
+form_url = ("https://docs.google.com/forms/d/e/1FAIpQLSeZxgPxGy_83AP-CW92Fq-vmODJmBSPtcFBdlKXKs-x6_o1QQ/viewform?usp=sf_link")
 
 data = requests.get(website_url)
 soup = BeautifulSoup(data.content, 'html.parser')
@@ -29,20 +35,19 @@ print(link_list)
 web_chrome = webdriver.ChromeOptions()
 web_chrome.add_experimental_option("detach", True)
 
-web_driver = webdriver.Chrome(options=web_chrome)
-web_driver.get(url=form_url)
+for i in range(len(price_list)):
+    web_driver = webdriver.Chrome(options=web_chrome)
+    web_driver.get(url=form_url)
+    time.sleep(2)
 
+    price_form = web_driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[2]/div/div/div[2]/div/div[1]/div/div[1]/input')
+    link_form = web_driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[3]/div/div/div[2]/div/div[1]/div/div[1]/input')
+    location_form = web_driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[2]/div[1]/div/div/div[2]/div/div[1]/div[2]/textarea')
+    submit_button = web_driver.find_element(By.XPATH, '//*[@id="mG61Hd"]/div[2]/div/div[3]/div[1]/div[1]/div/span/span')
+    location_form.send_keys(location_list[i])
+    price_form.send_keys(price_list[i])
+    link_form.send_keys(link_list[i])
 
-
-
-for i in range(0, len(price_list)):
-    price_form = web_driver.find_element(By.CLASS_NAME, "Hvn9fb zHQkBf")
-    link_form = web_driver.find_element(By.CLASS_NAME, "Hvn9fb zHQkBf")
-    location_form = web_driver.find_element(By.CLASS_NAME, "Hvn9fb zHQkBf")
-    submit_button = web_driver.find_element(By.CLASS_NAME, "l4V7wb Fxmcue")
-    price_form.send_keys(price_list[i], Keys.ENTER)
-    link_form.send_keys(link_list[i], Keys.ENTER)
-    location_form.send_keys(location_list[i], Keys.ENTER)
     submit_button.click()
 
 
