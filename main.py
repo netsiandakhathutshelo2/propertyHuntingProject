@@ -11,12 +11,11 @@ location = soup.find_all(name="address")
 link = soup.select(".StyledPropertyCardDataWrapper a")
 price = soup.find_all(name="span", class_="PropertyCardWrapper__StyledPriceLine")
 
-location_list = [address.getText().strip() for address in location]
+location_list = [address.getText().strip().replace("|", "") for address in location]
 print(location_list)
 
-price_list = [prices.getText().strip() for prices in price ]
+price_list = [prices.getText().strip().replace("/mo", "") for prices in price]
 print(price_list)
 
 link_list = [links["href"] for links in link]
 print(link_list)
-
